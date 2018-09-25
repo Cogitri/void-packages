@@ -1,0 +1,41 @@
+# INSTALL
+_run_host() {
+	# This function checks for the host tooling availability and then
+	# on the relative path
+	p="$1"
+	shift
+
+	if [ -x /usr/bin/$p ]; then
+		/usr/bin/$p "$@"
+	elif [ -x usr/bin/$p ]; then
+		usr/bin/$p "$@"
+	fi
+}
+
+case "$ACTION" in
+post)
+	# Set up machine-id if not existant
+	if [ ! -f etc/machine-id ]; then
+		_run_host systemd-machine-id-setup --root=.
+	fi
+
+	# Set permissions on the journal, ignore errors since it might be on a filesystem
+	# without support for acls
+	_run_host setfacl -Rnm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx var/log/journal/ 2>/dev/null
+
+	if [ "$UPDATE" = "yes" ]; then
+		# Update the catalog on every reboot
+		# NOTE(maxice8): If it is show that catalogs can be provided by other packages
+		# turn this into a hook on 'xbps-triggers'
+		_run_host journalctl --root=. --update-catalog
+
+		# Re-exec the daemon if systemd is running
+		if [ -d run/systemd/system ]; then
+			_run_host systemctl daemon-reload
+		fi
+	else
+		# On install enable the getty@tty1.service and remote-fs, ignore errors.
+		_run_host systemctl --root=. enable getty@tty1.service remote-fs.target || :
+	fi
+	;;
+esac

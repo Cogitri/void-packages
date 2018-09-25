@@ -1,0 +1,235 @@
+# Template file for 'systemd'
+pkgname=systemd
+version=239
+revision=1
+patch_args="-Np1"
+build_style=meson
+configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
+ -Dstatic-libsystemd=pic -Dlink-udev-shared=false -Dlink-systemctl-shared=true
+ -Dutmp=false -Dhibernate=true -Dldconfig=true -Dresolve=true -Defi=true
+ -Dtpm=false -Denvironment-d=true -Dbinfmt=true -Dcoredump=true -Dlogind=true
+ -Dhostnamed=true -Dlocaled=true -Dmachined=true -Dportabled=false -Dnetworkd=true
+ -Dtimedated=true -Dtimesyncd=true -Dremote=false -Ddefault-kill-user-processes=true
+ -Dnss-systemd=true -Dfirstboot=false -Dbacklight=true -Dvconsole=true
+ -Dsysusers=true -Dtmpfiles=true -Dimportd=true -Dhwdb=true -Drfkill=true -Dman=true
+ -Dhtml=false -Dfallback-hostname=voidlinux -Dseccomp=true -Dselinux=false
+ -Dapparmor=true -Dsmack=false -Dpolkit=false -Dacl=true -Daudit=false
+ -Dblkid=true -Dkmod=true -Dpam=true -Dmicrohttpd=false -Dlibcryptsetup=true
+ -Dlibcurl=true -Didn=true -Dgcrypt=true -Ddns-over-tls=true -Dlibidn2=false
+ -Dzlib=true -Dbzip2=true -Dxz=true -Dlz4=true -Dxkbcommon=true -Dpcre2=true
+ -Dglib=true -Ddbus=true -Dgnu-efi=false -Dtests=false -Dslow-tests=false
+ -Dinstall-tests=false -Dquotaon-path=/usr/bin/quotaon -Dkmod-path=/usr/bin/kmod
+ -Dquotacheck-path=/usr/bin/quotacheck -Dkexec-path=/usr/bin/kexec -Dpamconfdir=no
+ -Dsulogin-path=/usr/bin/sulogin -Dmount-path=/usr/bin/mount -Drpmmacrosdir=no
+ -Dumount-path=/usr/bin/umount -Dloadkeys-path=/usr/bin/loadkeys
+ -Dsetfont-path=/usr/bin/setfont -Dlibidn=true -Dnobody-user=nfsnobody
+ -Dnobody-group=nfsnobody -Dsysvinit-path= -Dsysvrcnd-path= -Dtelinit-path=
+ -Ddefault-hierarchy=unified -Ddbuspolicydir=/usr/share/dbus-1/system.d"
+hostmakedepends="pkg-config m4 gperf shadow libxslt docbook-xsl python3-lxml
+ bash-completion"
+makedepends="libcap-devel libmount-devel libseccomp-devel libapparmor-devel
+ acl-devel libblkid-devel libkmod-devel pam-devel cryptsetup-devel zlib-devel
+ libcurl-devel libidn-devel libgcrypt-devel libressl-devel dbus-devel lz4-devel
+ elfutils-devel bzip2-devel liblzma-devel libxkbcommon-devel pcre2-devel
+ libglib-devel gnutls-devel"
+depends="quota udev procps-ng util-linux dbus shadow kexec-tools kmod kbd"
+short_desc="System and service Manager"
+maintainer="maxice8 <thinkabit.ukim@gmail.com>"
+license="LGPL-2.1-or-later, GPL-2.0-only, GPL-2.0-or-later"
+homepage="https://www.freedesktop.org/wiki/Software/systemd/"
+distfiles="https://github.com/systemd/systemd/archive/v${version}.tar.gz"
+checksum=8a11b1b07d620f4c06a16e95bba4dd2a97e90efdf2a5ba47ed0a935085787a14
+shlib_provides="libsystemd-shared-${version}.so"
+system_groups="systemd-journal"
+
+conf_files="
+ /etc/pam.d/systemd-user
+ /etc/systemd/journald.conf
+ /etc/systemd/logind.conf
+ /etc/systemd/resolved.conf
+ /etc/systemd/system.conf
+ /etc/systemd/timesyncd.conf
+ /etc/systemd/user.conf"
+
+post_install() {
+	# This one is provided separately in the systemd-coredump package
+	sed -i '/u systemd-coredump  - "systemd Core Dumper"/d' ${DESTDIR}/usr/lib/sysusers.d/systemd.conf
+
+	# Avoid a conflict with base-files
+	sed -i '/^C \/etc\/nsswitch\.conf/d' ${DESTDIR}/usr/lib/tmpfiles.d/etc.conf
+
+	# Don't write units to /etc by default. Some of these will be re-enabled on
+	# post-install
+	rm -rf ${DESTDIR}/etc/systemd/system/*
+
+	# ship default policy to leave services disabled
+	echo 'disable *' > ${DESTDIR}/usr/lib/systemd/system-preset/99-default.preset
+
+	# Provide our own systemd-user pam configuration file
+	vinstall ${FILESDIR}/systemd-user.pam 644 etc/pam.d systemd-user
+
+	# Add directories systemd needs into tmpfiles.d(5) instead of using
+	# make_dirs
+	vinstall ${FILESDIR}/systemd-dirs.tmpfiles 644 usr/lib/tmpfiles.d systemd-dirs.conf
+
+	# Install runit service
+	vsv udevd
+
+	# remove references to render group and replace with video
+	sed -i 's|GROUP="render"|GROUP="video"|g' ${DESTDIR}/usr/lib/udev/rules.d/50-udev-default.rules
+}
+
+libsystemd_package() {
+	short_desc+=" - systemd runtime library"
+	pkg_install() {
+		vmove "usr/lib/libsystemd.so.*"
+	}
+}
+
+libudev_package() {
+	provides="eudev-libudev-${version}_${revision}"
+	replaces="eudev-libudev>=0"
+	short_desc+=" - udev runtime library"
+	pkg_install() {
+		vmove "usr/lib/libudev.so.*"
+	}
+}
+
+udev_package() {
+	depends="util-linux procps-ng shadow"
+	make_dirs="
+	  etc/udev/rules.d 755 root root
+	  etc/udev/hwdb.d 755 root root"
+	provides="eudev-${version}_${revision}"
+	replaces="eudev>=0"
+	conf_files="/etc/udev/udev.conf"
+	short_desc="Enhanced userland device daemon"
+	pkg_install() {
+		vmove usr/bin/udevadm
+		vmove usr/bin/systemd-hwdb
+		vmove etc/udev/udev.conf
+		vmove etc/sv
+		vmove usr/lib/udev
+		vmove usr/share/pkgconfig/udev.pc
+		vmove usr/share/man/man5/udev.conf.5
+		vmove usr/share/man/man5/systemd.link.5
+		vmove usr/share/man/man7/hwdb.7
+		vmove usr/share/man/man7/udev.7
+		vmove usr/share/man/man8/udevadm.8
+		vmove usr/share/bash-completion/completions/udevadm
+		vmove usr/share/zsh/site-functions/_udevadm
+		vmove "usr/lib/systemd/network/*.link"
+		vmove "usr/lib/systemd/system/systemd-udev*"
+		vmove "usr/lib/systemd/system/systemd-hwdb*"
+		vmove "usr/lib/systemd/system/*.target.wants/systemd-udev*"
+		vmove "usr/lib/systemd/system/*.target.wants/*hwdb*"
+		vmove usr/lib/systemd/systemd-udevd
+		ln -sr ${PKGDESTDIR}/usr/lib/systemd/systemd-udevd ${PKGDESTDIR}/usr/bin/udevd
+	}
+}
+
+libsystemd-devel_package() {
+	depends="libsystemd-${version}_${revision}"
+	short_desc+=" - systemd development files"
+	pkg_install() {
+		vmove usr/include/systemd
+		vmove usr/lib/libsystemd.a
+		vmove usr/lib/libsystemd.so
+		vmove "usr/share/man/man3/sd*"
+		vmove "usr/share/man/man3/SD*"
+		vmove usr/lib/pkgconfig/libsystemd.pc
+	}
+}
+
+libudev-devel_package() {
+	provides="eudev-libudev-devel-${version}_${revision}"
+	depends="libudev-${version}_${revision}"
+	short_desc+=" - udev development files"
+	pkg_install() {
+		vmove usr/include/libudev.h
+		vmove usr/lib/libudev.a
+		vmove usr/lib/libudev.so
+		vmove "usr/share/man/man3/udev*"
+		vmove "usr/share/man/man3/libudev*"
+		vmove usr/lib/pkgconfig/libudev.pc
+	}
+}
+
+systemd-sysvcompat_package() {
+	depends="systemd"
+	short_desc+=" - sysvinit compatibility shims"
+	pkg_install() {
+		vmove usr/share/man/man1/init.1
+		vmove usr/share/man/man8/telinit.8
+		vmove usr/share/man/man8/halt.8
+		vmove usr/share/man/man8/reboot.8
+		vmove usr/share/man/man8/poweroff.8
+		vmove usr/share/man/man8/shutdown.8
+		vmove usr/bin/init
+		vmove usr/bin/telinit
+		vmove usr/bin/halt
+		vmove usr/bin/reboot
+		vmove usr/bin/poweroff
+		vmove usr/bin/runlevel
+		vmove usr/bin/shutdown
+	}
+}
+
+systemd-container_package() {
+	depends="systemd dbus btrfs-progs"
+	short_desc+=" - Tools for managing containers"
+	pkg_install() {
+		vmove usr/bin/machinectl
+		vmove usr/lib/systemd/import-pubring.gpg
+		vmove usr/lib/systemd/systemd-machined
+		vmove usr/lib/systemd/systemd-export
+		vmove "usr/lib/systemd/systemd-import*"
+		vmove usr/lib/systemd/systemd-pull
+		vmove usr/lib/systemd/system/systemd-nspawn@.service
+		vmove usr/lib/systemd/system/systemd-importd.service
+		vmove usr/lib/systemd/system/systemd-machined.service
+		vmove usr/lib/systemd/system/var-lib-machines.mount
+		vmove usr/lib/systemd/system/machines.target
+		vmove usr/lib/systemd/system/remote-fs.target.wants/var-lib-machines.mount
+		vmove usr/lib/systemd/system/dbus-org.freedesktop.import1.service
+		vmove usr/lib/systemd/system/dbus-org.freedesktop.machine1.service
+		vmove usr/bin/systemd-nspawn
+		vmove usr/lib/tmpfiles.d/systemd-nspawn.conf
+		vmove usr/share/dbus-1/system.d/org.freedesktop.import1.conf
+		vmove usr/share/dbus-1/system.d/org.freedesktop.machine1.conf
+		vmove usr/share/dbus-1/system-services/org.freedesktop.import1.service
+		vmove usr/share/dbus-1/system-services/org.freedesktop.machine1.service
+		vmove "usr/share/man/man*/*nspawn*"
+		vmove "usr/share/man/man*/machinectl*"
+		vmove "usr/share/man/man*/systemd-machined*"
+		vmove usr/share/polkit-1/actions/org.freedesktop.import1.policy
+		vmove usr/share/polkit-1/actions/org.freedesktop.machine1.policy
+		vmove usr/share/zsh/site-functions/_systemd-nspawn
+		vmove usr/share/zsh/site-functions/_sd_machines
+		vmove usr/share/zsh/site-functions/_machinectl
+		vmove usr/share/bash-completion/completions/machinectl
+		vmove usr/share/bash-completion/completions/systemd-nspawn
+	}
+}
+
+systemd-coredump_package() {
+	conf_files="/etc/systemd/coredump.conf"
+	depends="systemd shadow"
+	short_desc+=" - tools for restoring and retrieving coredumps"
+	pkg_install() {
+		vmove usr/bin/coredumpctl
+		vmove usr/lib/systemd/systemd-coredump
+		vmove "usr/lib/systemd/system/systemd-coredump*"
+		vmove "usr/share/man/man1/coredumpctl*"
+		vmove "usr/share/man/man5/coredump.conf*"
+		vmove "usr/share/man/man8/systemd-coredump*"
+		vmove usr/share/bash-completion/completions/coredumpctl
+		vmove usr/share/zsh/site-functions/_coredumpctl
+		vmove usr/lib/sysctl.d/50-coredump.conf
+		vmove etc/systemd/coredump.conf
+
+		vmkdir usr/lib/sysuser.d
+		# This one is extracted from basic.conf and moved to this package
+		echo 'u systemd-coredump  - "systemd Core Dumper"' > ${PKGDESTDIR}/usr/lib/sysuser.d/systemd-coredump.conf
+	}
+}
