@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Runs systemd-tmpfiles --create to create directories based on entries
+# of the tmpfiles.d(5) specification
+#
+# Arguments:	$ACTION = [run/targets]
+#		$TARGET = [post-install]
+#		$PKGNAME
+#		$VERSION
+#		$UPDATE = [yes/no]
+#
+ACTION="$1"
+TARGET="$2"
+PKGNAME="$3"
+VERSION="$4"
+UPDATE="$5"
+
+case "$ACTION" in
+targets)
+	echo "post-install"
+	;;
+run)
+	case "$TARGET" in
+	post-install)
+		if [ -x /usr/bin/systemd-tmpfiles ]; then
+			echo "Creating tmpfiles.d entries..."
+			/usr/bin/systemd-tmpfiles --root=. --create
+		elif [ -x usr/bin/systemd-tmpfiles ]; then
+			echo "Creating tmpfiles.d entries..."
+			usr/bin/systemd-tmpfiles --root=. --create
+		fi
+		;;
+	esac
+	;;
+*)
+	exit 1
+	;;
+esac
+
+exit 0

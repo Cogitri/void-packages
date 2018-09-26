@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Runs systemd-sysctl to apply kernel configuration files on packages installation
+# and update
+#
+# Arguments:	$ACTION = [run/targets]
+#		$TARGET = [post-install]
+#		$PKGNAME
+#		$VERSION
+#		$UPDATE = [yes/no]
+#
+ACTION="$1"
+TARGET="$2"
+PKGNAME="$3"
+VERSION="$4"
+UPDATE="$5"
+
+case "$ACTION" in
+targets)
+	echo "post-install"
+	;;
+run)
+	case "$TARGET" in
+	post-install)
+		if [ ! -d run/systemd/system ]; then
+			exit 0
+		fi
+
+		# XXX: systemd-sysctl doesn't have the --root parameter since it
+		# can only be run on booted installations of systemd
+		if [ -x /usr/lib/systemd/systemd-sysctl ]; then
+			echo "Applying kernel sysctl settings ..."
+			/usr/lib/systemd/systemd-sysctl
+	
+		elif [ -x usr/lib/systemd/systemd-sysusers ]; then
+			echo "Applying kernel sysctl settings ..."
+			usr/lib/systemd/systemd-sysctl
+		fi
+		;;
+	esac
+	;;
+*)
+	exit 1
+	;;
+esac
+
+exit 0

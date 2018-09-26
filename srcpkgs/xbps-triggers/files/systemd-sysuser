@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Runs systemd-sysuser to create user accounts according to the sysuser.d(5)
+# specification
+#
+# Arguments:	$ACTION = [run/targets]
+#		$TARGET = [post-install]
+#		$PKGNAME
+#		$VERSION
+#		$UPDATE = [yes/no]
+#
+ACTION="$1"
+TARGET="$2"
+PKGNAME="$3"
+VERSION="$4"
+UPDATE="$5"
+
+case "$ACTION" in
+targets)
+	echo "post-install"
+	;;
+run)
+	case "$TARGET" in
+	post-install)
+		if [ -x /usr/bin/systemd-sysusers ]; then
+			echo "Creating system user accounts..."
+			/usr/bin/systemd-sysusers --root=.
+		elif [ -x usr/bin/systemd-sysusers ]; then
+			echo "Creating system user accounts..."
+			usr/bin/systemd-sysusers --root=.
+		fi
+		;;
+	esac
+	;;
+*)
+	exit 1
+	;;
+esac
+
+exit 0

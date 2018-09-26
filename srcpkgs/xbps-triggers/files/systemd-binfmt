@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# Run systemd-binfmt to update configuration of additional binary formats
+# of the tmpfiles.d(5) specification
+#
+# Arguments:	$ACTION = [run/targets]
+#		$TARGET = [post-install]
+#		$PKGNAME
+#		$VERSION
+#		$UPDATE = [yes/no]
+#
+ACTION="$1"
+TARGET="$2"
+PKGNAME="$3"
+VERSION="$4"
+UPDATE="$5"
+
+case "$ACTION" in
+targets)
+	echo "post-install"
+	;;
+run)
+	case "$TARGET" in
+	post-install)
+		if [ ! -d run/systemd/system ]; then
+			exit 0
+		fi
+
+		if [ -x /usr/lib/systemd/systemd-binfmt ]; then
+			echo "Updating binary formats entry..."
+			/usr/lib/systemd/systemd-binfmt
+		elif [ -x usr/lib/systemd-binfmt ]; then
+			echo "Updating binary formats entry..."
+			usr/lib/systemd/systemd-binfmt
+		fi
+		;;
+	esac
+	;;
+*)
+	exit 1
+	;;
+esac
+
+exit 0

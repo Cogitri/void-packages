@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# Runs systemd-hwdb --usr (create|update) to create/update the hardware database
+#
+# Arguments:	$ACTION = [run/targets]
+#		$TARGET = [post-install/post-remove]
+#		$PKGNAME
+#		$VERSION
+#		$UPDATE = [yes/no]
+#
+ACTION="$1"
+TARGET="$2"
+PKGNAME="$3"
+VERSION="$4"
+UPDATE="$5"
+
+case "$ACTION" in
+targets)
+	echo "post-install post-remove"
+	;;
+run)
+	case "$TARGET" in
+	post-install|post-remove)
+		if [ -x /usr/bin/systemd-hwdb ]; then
+			echo "Updating hardware database ..."
+			/usr/bin/systemd-hwdb --usr --root=. update
+		elif [ -x usr/bin/systemd-sysusers ]; then
+			echo "Updating hardware database ..."
+			usr/bin/systemd-hwdb --usr --root=. update
+		fi
+		;;
+	esac
+	;;
+*)
+	exit 1
+	;;
+esac
+
+exit 0

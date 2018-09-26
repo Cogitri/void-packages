@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# Runs udevadm control --reload to reload udev rules
+#
+# Arguments:	$ACTION = [run/targets]
+#		$TARGET = [post-install/post-remove]
+#		$PKGNAME
+#		$VERSION
+#		$UPDATE = [yes/no]
+#
+ACTION="$1"
+TARGET="$2"
+PKGNAME="$3"
+VERSION="$4"
+UPDATE="$5"
+
+case "$ACTION" in
+targets)
+	echo "post-install post-remove"
+	;;
+run)
+	case "$TARGET" in
+	post-install|post-remove)
+		# Don't run if udev is not active
+		if [ ! -d run/udev ]; then
+			exit 0
+		fi
+
+		if [ -x /usr/bin/udevadm ]; then
+			echo "Reloading udev rules..."
+			/usr/bin/udevadm control --reload
+		elif [ -x usr/bin/udevadm ]; then
+			echo "Reloading udev rules..."
+			usr/bin/udevadm control --reload
+		fi
+		;;
+	esac
+	;;
+*)
+	exit 1
+	;;
+esac
+
+exit 0
