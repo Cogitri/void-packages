@@ -79,36 +79,36 @@ _EOF
 	#
 	# Handle system accounts.
 	#
-	if [ -n "${system_accounts}" ]; then
-		_add_trigger system-accounts
-		echo "export system_accounts=\"${system_accounts}\"" >> $tmpf
-		for f in ${system_accounts}; do
-			local _uname="${f%:*}"
-			local _uid="${f#*:}"
+	# if [ -n "${system_accounts}" ]; then
+	# 	_add_trigger system-accounts
+	# 	echo "export system_accounts=\"${system_accounts}\"" >> $tmpf
+	# 	for f in ${system_accounts}; do
+	# 		local _uname="${f%:*}"
+	# 		local _uid="${f#*:}"
 
-			eval homedir="\$${_uname}_homedir"
-			eval shell="\$${_uname}_shell"
-			eval descr="\$${_uname}_descr"
-			eval groups="\$${_uname}_groups"
-			eval pgroup="\$${_uname}_pgroup"
-			if [ -n "$homedir" ]; then
-				echo "export ${_uname}_homedir=\"$homedir\"" >> $tmpf
-			fi
-			if [ -n "$shell" ]; then
-				echo "export ${_uname}_shell=\"$shell\"" >> $tmpf
-			fi
-			if [ -n "$descr" ]; then
-				echo "export ${_uname}_descr=\"$descr\"" >> $tmpf
-			fi
-			if [ -n "$groups" ]; then
-				echo "export ${_uname}_groups=\"${groups}\"" >> $tmpf
-			fi
-			if [ -n "$pgroup" ]; then
-				echo "export ${_uname}_pgroup=\"${pgroup}\"" >> $tmpf
-			fi
-			unset homedir shell descr groups pgroup
-		done
-	fi
+	# 		eval homedir="\$${_uname}_homedir"
+	# 		eval shell="\$${_uname}_shell"
+	# 		eval descr="\$${_uname}_descr"
+	# 		eval groups="\$${_uname}_groups"
+	# 		eval pgroup="\$${_uname}_pgroup"
+	# 		if [ -n "$homedir" ]; then
+	# 			echo "export ${_uname}_homedir=\"$homedir\"" >> $tmpf
+	# 		fi
+	# 		if [ -n "$shell" ]; then
+	# 			echo "export ${_uname}_shell=\"$shell\"" >> $tmpf
+	# 		fi
+	# 		if [ -n "$descr" ]; then
+	# 			echo "export ${_uname}_descr=\"$descr\"" >> $tmpf
+	# 		fi
+	# 		if [ -n "$groups" ]; then
+	# 			echo "export ${_uname}_groups=\"${groups}\"" >> $tmpf
+	# 		fi
+	# 		if [ -n "$pgroup" ]; then
+	# 			echo "export ${_uname}_pgroup=\"${pgroup}\"" >> $tmpf
+	# 		fi
+	# 		unset homedir shell descr groups pgroup
+	# 	done
+	# fi
 	#
 	# Handle mkdirs trigger.
 	#
@@ -147,7 +147,7 @@ _EOF
 	# Handle files in hwdb directory
 	#
 	if [ -d "${PKGDESTDIR}/usr/lib/udev/hwdb.d" ]; then
-		_add_trigger hwdb.d-dir
+		_add_trigger systemd-hwdb
 	fi
 	#
 	# (Un)Register a shell in /etc/shells.
@@ -281,6 +281,36 @@ _EOF
 			break
 		fi
 	done
+	#
+	# Handle udev rules
+	#
+	if [ -d ${PKGDESTDIR}/usr/lib/udev/rules.d ]; then
+		_add_trigger udev-rules
+	fi
+	#
+	# Handle tmpfiles.d files
+	#
+	if [ -d ${PKGDESTDIR}/usr/lib/tmpfiles.d ]; then
+		_add_trigger systemd-tmpfiles
+	fi
+	#
+	# Handle sysuser.d files
+	#
+	if [ -d ${PKGDESTDIR}/usr/lib/sysusers.d ]; then
+		_add_trigger systemd-sysuser
+	fi
+	#
+	# Handle sysctl.d files
+	#
+	if [ -d ${PKGDESTDIR}/usr/lib/sysctl.d ]; then
+		_add_trigger systemd-sysctl
+	fi
+	#
+	# Handle binfmt.d files
+	#
+	if [ -d ${PKGDESTDIR}/usr/lib/binfmt.d ]; then
+		_add_trigger systemd-binfmt
+	fi
 
 	# End of trigger var exports.
 	echo >> $tmpf
