@@ -32,7 +32,7 @@ makedepends="libcap-devel libmount-devel libseccomp-devel libapparmor-devel
  libcurl-devel libidn-devel libgcrypt-devel libressl-devel dbus-devel lz4-devel
  elfutils-devel bzip2-devel liblzma-devel libxkbcommon-devel pcre2-devel
  libglib-devel gnutls-devel"
-depends="quota udev procps-ng util-linux dbus-systemd shadow kexec-tools kmod kbd"
+depends="quota udev procps-ng util-linux dbus shadow kexec-tools kmod kbd"
 short_desc="System and service Manager"
 maintainer="maxice8 <thinkabit.ukim@gmail.com>"
 license="LGPL-2.1-or-later, GPL-2.0-only, GPL-2.0-or-later"

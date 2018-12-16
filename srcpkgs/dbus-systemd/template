@@ -2,6 +2,7 @@
 pkgname=dbus-systemd
 version=1.12.12
 revision=2
+wrksrc="dbus-${version}"
 build_style=gnu-configure
 configure_args="--disable-selinux --enable-inotify --with-dbus-user=dbus
  --enable-xml-docs --disable-static --disable-tests --enable-epoll
@@ -18,12 +19,14 @@ changelog="https://raw.githubusercontent.com/freedesktop/dbus/dbus-1.12/NEWS"
 distfiles="https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz"
 checksum=9546f226011a1e5d9d77245fe5549ef25af4694053189d624d0d6ac127ecf5f8
 conf_files="/etc/dbus-1/session.conf /etc/dbus-1/system.conf"
+replaces="dbus>=0"
+provides="dbus-${version}_${revision}"
 
 # Create dbus:22 system account.
 system_accounts="dbus:22"
 
 dbus-systemd-devel_package() {
-	depends="expat-devel dbus-libs>=${version}_${revision}"
+	depends="expat-devel dbus-systemd-libs>=${version}_${revision}"
 	short_desc+=" - development files"
 	pkg_install() {
 		vmove usr/include
