@@ -41,8 +41,6 @@ pre_configure() {
 post_install() {
 	vinstall data/sysconfig.snapper 644 etc/conf.d snapper
 	vsv snapperd
-
-	rm -rf -- "${DESTDIR}"/usr/lib/systemd
 }
 
 libsnapper_package() {
