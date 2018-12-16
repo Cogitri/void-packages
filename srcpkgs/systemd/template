@@ -1,7 +1,7 @@
 # Template file for 'systemd'
 pkgname=systemd
 version=239
-revision=1
+revision=2
 patch_args="-Np1"
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
@@ -13,7 +13,7 @@ configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
  -Dnss-systemd=true -Dfirstboot=false -Dbacklight=true -Dvconsole=true
  -Dsysusers=true -Dtmpfiles=true -Dimportd=true -Dhwdb=true -Drfkill=true -Dman=true
  -Dhtml=false -Dfallback-hostname=voidlinux -Dseccomp=true -Dselinux=false
- -Dapparmor=true -Dsmack=false -Dpolkit=false -Dacl=true -Daudit=false
+ -Dapparmor=true -Dsmack=false -Dpolkit=true -Dacl=true -Daudit=false
  -Dblkid=true -Dkmod=true -Dpam=true -Dmicrohttpd=false -Dlibcryptsetup=true
  -Dlibcurl=true -Didn=true -Dgcrypt=true -Ddns-over-tls=true -Dlibidn2=false
  -Dzlib=true -Dbzip2=true -Dxz=true -Dlz4=true -Dxkbcommon=true -Dpcre2=true
@@ -31,7 +31,7 @@ makedepends="libcap-devel libmount-devel libseccomp-devel libapparmor-devel
  acl-devel libblkid-devel libkmod-devel pam-devel cryptsetup-devel zlib-devel
  libcurl-devel libidn-devel libgcrypt-devel libressl-devel dbus-devel lz4-devel
  elfutils-devel bzip2-devel liblzma-devel libxkbcommon-devel pcre2-devel
- libglib-devel gnutls-devel"
+ libglib-devel gnutls-devel polkit-devel"
 depends="quota udev procps-ng util-linux dbus shadow kexec-tools kmod kbd"
 short_desc="System and service Manager"
 maintainer="maxice8 <thinkabit.ukim@gmail.com>"
