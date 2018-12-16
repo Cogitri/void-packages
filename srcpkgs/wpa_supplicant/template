@@ -2,7 +2,7 @@
 pkgname=wpa_supplicant
 reverts="2.7_1"
 version=2.6
-revision=13
+revision=14
 build_wrksrc="$pkgname"
 short_desc="WPA/WPA2/IEEE 802.1X Supplicant"
 maintainer="Juan RP <xtraeme@voidlinux.eu>"
@@ -45,6 +45,9 @@ do_install() {
 		install -m644 dbus/*.service ${DESTDIR}/usr/share/dbus-1/system-services/
 		vinstall dbus/dbus-${pkgname}.conf 644 etc/dbus-1/system.d ${pkgname}.conf
 	fi
+
+	install -d ${DESTDIR}/usr/lib/systemd/system
+	install -m644 systemd/*.service ${DESTDIR}/usr/lib/systemd/system
 
 	vinstall ${FILESDIR}/${pkgname}.conf 640 etc/$pkgname
 	vsconf wpa_supplicant.conf
