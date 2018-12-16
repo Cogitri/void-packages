@@ -1,11 +1,11 @@
 # Template file for 'sysprof'
 pkgname=sysprof
 version=3.30.2
-revision=1
+revision=2
 build_style=meson
-configure_args="-Denable_gtk=true -Dsystemdunitdir=/DELETEME"
+configure_args="-Denable_gtk=true -Dsystemdunitdir=/usr/lib/systemd/system"
 hostmakedepends="pkg-config itstool glib-devel"
-makedepends="gtk+3-devel polkit-devel glib-devel elogind-devel"
+makedepends="gtk+3-devel polkit-devel glib-devel libsystemd-devel"
 short_desc="A system-wide profiler for Linux"
 maintainer="Rasmus Thomsen <rasmus.thomsen@protonmail.com>"
 license="GPL-2.0-or-later, GPL-3.0-or-later"
@@ -23,10 +23,6 @@ CFLAGS=" -Wno-error -Wno-error=undef"
 
 pre_build() {
 	export SHELL=/bin/bash
-}
-
-post_install() {
-	rm -r $DESTDIR/DELETEME
 }
 
 sysprof-devel_package() {
