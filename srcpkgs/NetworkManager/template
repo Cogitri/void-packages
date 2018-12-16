@@ -1,7 +1,7 @@
 # Template file for 'NetworkManager'
 pkgname=NetworkManager
 version=1.14.4
-revision=1
+revision=2
 build_style=gnu-configure
 configure_args="--without-dhcpcd --with-dhclient=/usr/bin/dhclient
  --with-system-ca-path=/etc/ssl/certs --enable-more-warnings=no
@@ -10,13 +10,14 @@ configure_args="--without-dhcpcd --with-dhclient=/usr/bin/dhclient
  --with-kernel-firmware-dir=/usr/lib/firmware --disable-ifcfg-rh
  --with-pppd-plugin-dir=/usr/lib/pppd/2.4.7 --enable-modify-system
  --with-modem-manager-1 --with-resolvconf=/usr/bin/resolvconf
- --with-session-tracking=$(vopt_if elogind logind consolekit)
+ --with-session-tracking=logind
  --with-suspend-resume=upower --with-libnm-glib --disable-ifupdown
- --with-systemdsystemunitdir=no --enable-polkit-agent --enable-tests=no
- --with-systemd-journal=no --with-systemd-logind=no --disable-gtk-doc
+ --enable-polkit-agent --enable-tests=no --with-systemd
+ --with-systemd-journal=yes --with-systemd-logind=yes --disable-gtk-doc
  --with-dbus-sys-dir=/etc/dbus-1/system.d
  --sbindir=/usr/bin --enable-concheck --with-libpsl
  --with-dnsmasq=/usr/bin/dnsmasq --with-config-dhcp-default=dhclient
+ --with-systemdsystemunitdir=/usr/lib/systemd/system
  ac_cv_file__etc_redhat_release=no ac_cv_file__etc_gentoo_release=no
  ac_cv_file__etc_fedora_release=no ac_cv_file__etc_mandriva_release=no
  ac_cv_file__etc_SuSE_release=no ac_cv_file__etc_debian_version=no"
@@ -35,7 +36,7 @@ hostmakedepends="automake bluez dbus-glib-devel dhclient gettext-devel
 makedepends="libuuid-devel gnutls-devel dbus-glib-devel libgudev-devel
  libnl3-devel polkit-devel ppp-devel iptables-devel libcurl-devel
  ModemManager-devel readline-devel libndp-devel newt-devel jansson-devel
- libpsl-devel
+ libpsl-devel libsystemd-devel libudev-devel
  $(vopt_if gir libgirepository-devel) $(vopt_if elogind elogind-devel)"
 # Install host dependency to read the soname. Should be the same on
 # host and target.
