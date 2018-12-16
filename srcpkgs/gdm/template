@@ -1,16 +1,17 @@
 # Template file for 'gdm'
 pkgname=gdm
 version=3.30.2
-revision=1
+revision=2
 build_style=gnu-configure
 configure_args="$(vopt_enable gir introspection)
  --disable-schemas-compile --disable-static --with-default-pam-config=arch
  --with-at-spi-registryd-directory=/usr/libexec --without-tcp-wrappers
  --with-screenshot-dir=/var/lib/gdm/greeter --sbindir=/usr/bin --without-plymouth
  --with-xauth-dir=/run/gdm --with-pid-file=/run/gdm/gdm.pid
- --disable-systemd-journal --with-initial-vt=7 --enable-wayland-support"
+ --enable-systemd-journal --with-initial-vt=7 --enable-wayland-support
+ --with-systemdsystemunitdir=/usr/lib/systemd/system"
 hostmakedepends="gnome-doc-utils itstool pkg-config $(vopt_if gir 'gobject-introspection')"
-makedepends="accountsservice-devel dconf elogind-devel gettext-devel glib-devel
+makedepends="accountsservice-devel dconf libsystemd-devel gettext-devel glib-devel
  iso-codes libSM-devel libcanberra-devel nss-devel pam-devel upower-devel"
 depends="gnome-settings-daemon gnome-shell xorg-server xorg-server-xwayland
  xrdb"
@@ -43,13 +44,13 @@ fi
 post_install() {
 	vinstall $FILESDIR/Xsession 755 etc/gdm
 
-	sed -i "s/pam_systemd\.so/pam_elogind.so/" $DESTDIR/etc/pam.d/*
+	#sed -i "s/pam_systemd\.so/pam_elogind.so/" $DESTDIR/etc/pam.d/*
 
 	# fix with eudev
-	sed -i 's/\\"//g; s/\[/\\[/; s/\\n/\\\\n/' $DESTDIR/usr/lib/udev/rules.d/61-gdm.rules
+	#sed -i 's/\\"//g; s/\[/\\[/; s/\\n/\\\\n/' $DESTDIR/usr/lib/udev/rules.d/61-gdm.rules
 
 	# runit service
-	vsv gdm
+	#vsv gdm
 }
 
 libgdm_package() {
