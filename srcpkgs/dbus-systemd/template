@@ -1,15 +1,15 @@
-# Template file for 'dbus'
-pkgname=dbus
+# Template file for 'dbus-systemd'
+pkgname=dbus-systemd
 version=1.12.12
 revision=2
 build_style=gnu-configure
 configure_args="--disable-selinux --enable-inotify --with-dbus-user=dbus
  --enable-xml-docs --disable-static --disable-tests --enable-epoll
- --disable-asserts --disable-systemd --disable-user-session
+ --disable-asserts --enable-systemd --disable-user-session
  --with-system-socket=/run/dbus/system_bus_socket --disable-doxygen-docs
  --with-system-pid-file=/run/dbus/pid --with-console-auth-dir=/run/console"
 hostmakedepends="gperf intltool pkg-config xmlto"
-makedepends="expat-devel libX11-devel libcap-devel"
+makedepends="expat-devel libX11-devel libcap-devel libsystemd-devel"
 short_desc="Message bus system"
 maintainer="Juan RP <xtraeme@voidlinux.eu>"
 license="GPL-2.0-or-later"
@@ -22,11 +22,7 @@ conf_files="/etc/dbus-1/session.conf /etc/dbus-1/system.conf"
 # Create dbus:22 system account.
 system_accounts="dbus:22"
 
-post_install() {
-	vsv dbus
-}
-
-dbus-devel_package() {
+dbus-systemd-devel_package() {
 	depends="expat-devel dbus-libs>=${version}_${revision}"
 	short_desc+=" - development files"
 	pkg_install() {
@@ -39,14 +35,14 @@ dbus-devel_package() {
 	}
 }
 
-dbus-libs_package() {
+dbus-systemd-libs_package() {
 	short_desc+=" - shared libraries"
 	pkg_install() {
 		vmove "usr/lib/*.so.*"
 	}
 }
 
-dbus-x11_package() {
+dbus-systemd-x11_package() {
 	short_desc+=" - X11 support"
 	pkg_install() {
 		vmove usr/bin/dbus-launch
