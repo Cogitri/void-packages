@@ -1,15 +1,15 @@
 # Template file for 'dbus'
 pkgname=dbus
 version=1.12.12
-revision=1
+revision=2
 build_style=gnu-configure
 configure_args="--disable-selinux --enable-inotify --with-dbus-user=dbus
  --enable-xml-docs --disable-static --disable-tests --enable-epoll
- --disable-asserts --disable-systemd --disable-user-session
+ --disable-asserts --enable-systemd --disable-user-session
  --with-system-socket=/run/dbus/system_bus_socket --disable-doxygen-docs
  --with-system-pid-file=/run/dbus/pid --with-console-auth-dir=/run/console"
 hostmakedepends="gperf intltool pkg-config xmlto"
-makedepends="expat-devel libX11-devel libcap-devel"
+makedepends="expat-devel libX11-devel libcap-devel libsystemd-devel"
 short_desc="Message bus system"
 maintainer="Juan RP <xtraeme@voidlinux.eu>"
 license="GPL-2.0-or-later"
