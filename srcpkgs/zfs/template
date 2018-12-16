@@ -1,7 +1,7 @@
 # Template file for 'zfs'
 pkgname=zfs
 version=0.7.12
-revision=1
+revision=2
 patch_args="-Np1"
 build_style=gnu-configure
 configure_args="--with-config=user --with-mounthelperdir=/usr/bin
@@ -33,7 +33,6 @@ post_install() {
 	tar xf ../clean.tar.gz -C ${DESTDIR}/usr/src/${pkgname}-${version}
 	scripts/dkms.mkconf -v ${version} -f ${DESTDIR}/usr/src/${pkgname}-${version}/dkms.conf -n zfs
 
-	rm -rf ${DESTDIR}/usr/lib/systemd
 	rm -rf ${DESTDIR}/usr/share/initramfs-tools
 }
 
