@@ -1,12 +1,13 @@
 # Template file for 'zfs'
 pkgname=zfs
 version=0.7.12
-revision=1
+revision=2
 patch_args="-Np1"
 build_style=gnu-configure
 configure_args="--with-config=user --with-mounthelperdir=/usr/bin
  --with-udevdir=/usr/lib/udev --with-udevruledir=/usr/lib/udev/rules.d
- --with-dracutdir=/usr/lib/dracut --with-tirpc"
+ --with-dracutdir=/usr/lib/dracut --with-tirpc
+ --with-systemdunitdir=/usr/lib/systemd/system --enable-systemd"
 hostmakedepends="dracut libtool pkg-config"
 makedepends="spl-devel zlib-devel libuuid-devel libblkid-devel libtirpc-devel attr-devel"
 conf_files="/etc/zfs/zed.d/zed.rc"
@@ -33,7 +34,6 @@ post_install() {
 	tar xf ../clean.tar.gz -C ${DESTDIR}/usr/src/${pkgname}-${version}
 	scripts/dkms.mkconf -v ${version} -f ${DESTDIR}/usr/src/${pkgname}-${version}/dkms.conf -n zfs
 
-	rm -rf ${DESTDIR}/usr/lib/systemd
 	rm -rf ${DESTDIR}/usr/share/initramfs-tools
 }
 
