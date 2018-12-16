@@ -1,11 +1,11 @@
 # Template file for 'gnome-session'
 pkgname=gnome-session
 version=3.30.1
-revision=1
+revision=2
 build_style=meson
 hostmakedepends="glib-devel intltool pkg-config xmlto"
-configure_args="-Dsystemd_journal=false"
-makedepends="elogind-devel gnome-desktop-devel gtk+3-devel json-glib-devel
+configure_args="-Dsystemd_journal=true"
+makedepends="libsystemd-devel gnome-desktop-devel gtk+3-devel json-glib-devel
  libglib-devel libICE-devel libSM-devel libXtst-devel startup-notification-devel
  upower-devel xtrans"
 depends="alsa-plugins-pulseaudio dconf desktop-file-utils
