@@ -1,12 +1,12 @@
 # Template file for 'mutter'
 pkgname=mutter
 version=3.30.2
-revision=1
+revision=2
 build_style=gnu-configure
 configure_args="--disable-schemas-compile --disable-static --enable-egl-device
  --enable-remote-desktop"
 hostmakedepends="glib-devel gobject-introspection pkg-config zenity"
-makedepends="elogind-devel glib-devel gnome-desktop-devel json-glib-devel
+makedepends="libsystemd-devel glib-devel gnome-desktop-devel json-glib-devel
  libglib-devel libSM-devel libXtst-devel libcanberra-devel libinput-devel
  MesaLib-devel pipewire-devel startup-notification-devel wayland-protocols"
 depends="desktop-file-utils zenity"
