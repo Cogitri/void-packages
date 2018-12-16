@@ -1,6 +1,6 @@
 # Template file for 'hplip'
 pkgname=hplip
-version=3.19.1
+version=3.19.2
 revision=1
 build_style=gnu-configure
 pycompile_dirs="usr/share/hplip"
@@ -53,8 +53,6 @@ do_install() {
 	# remove HAL .fdi file because HAL is no longer used
 	rm -rf ${DESTDIR}/usr/share/hal
 	rm -rf ${DESTDIR}/var
-	# remove systemd service file
-	rm -rf ${DESTDIR}/usr/lib/systemd
 	# save gui-version of hplip.conf
 	cp -p ${DESTDIR}/etc/hp/hplip.conf /tmp/hplip.conf
 	# adjust values to non-gui version
