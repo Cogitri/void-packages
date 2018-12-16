@@ -1,7 +1,7 @@
 # Template file for 'udisks2'
 pkgname=udisks2
 version=2.8.1
-revision=3
+revision=4
 wrksrc="udisks-${version}"
 build_style=gnu-configure
 configure_args="--disable-static --with-udevdir=/usr/lib/udev
@@ -10,7 +10,7 @@ configure_args="--disable-static --with-udevdir=/usr/lib/udev
 hostmakedepends="docbook-xsl glib-devel intltool libxslt pkg-config
  $(vopt_if gir 'gobject-introspection')"
 makedepends="acl-devel libatasmart-devel libgudev-devel libparted-devel
- polkit-devel sg3_utils-devel libblockdev-devel libbtrfs-devel elogind-devel"
+ polkit-devel sg3_utils-devel libblockdev-devel libbtrfs-devel libsystemd-devel"
 short_desc="Disk Management Service, version 2"
 maintainer="Juan RP <xtraeme@voidlinux.eu>"
 license="GPL-2.0-or-later"
