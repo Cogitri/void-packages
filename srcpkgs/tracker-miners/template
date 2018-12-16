@@ -1,7 +1,7 @@
 # Template file for 'tracker-miners'
 pkgname=tracker-miners
 version=2.1.5
-revision=2
+revision=3
 build_style=gnu-configure
 configure_args="--enable-libvorbis --enable-libflac"
 hostmakedepends="glib-devel intltool pkg-config vala"
@@ -17,8 +17,4 @@ checksum=f5fd3d4b5573539554d5982ee8ecc10ea84f6693378c5bcc7b162096a63bb8cd
 do_check() {
 	# Tries to write to /var/log/tracker-test and fails to do so.
 	:
-}
-
-post_install() {
-	rm -rf ${DESTDIR}/usr/lib/systemd # we don't need this
 }
