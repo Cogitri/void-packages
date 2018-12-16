@@ -1,9 +1,10 @@
 # Template file for 'upower'
 pkgname=upower
 version=0.99.7
-revision=4
+revision=5
 build_style=gnu-configure
-configure_args="--disable-static --with-backend=linux"
+configure_args="--disable-static --with-backend=linux
+ --with-systemdsystemunitdir=/usr/lib/systemd/system"
 hostmakedepends="pkg-config intltool libxslt docbook-xsl $(vopt_if gir gobject-introspection)"
 makedepends="libusb-devel libgudev-devel dbus-glib-devel libimobiledevice-devel polkit-devel"
 conf_files="/etc/UPower/UPower.conf"
