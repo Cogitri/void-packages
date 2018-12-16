@@ -1,13 +1,13 @@
 # Template file for 'libostree'
 pkgname=libostree
 version=2018.9
-revision=1
+revision=2
 build_style=gnu-configure
 configure_args="--with-builtin-grub2-mkconfig --with-openssl
  $(vopt_enable gir introspection)"
 hostmakedepends="bison docbook-xsl glib-devel libxslt pkg-config"
 makedepends="e2fsprogs-devel fuse-devel glib-devel gpgme-devel libarchive-devel
- libsoup-devel $(vopt_if gir 'gobject-introspection')"
+ libsoup-devel libsystemd-devel $(vopt_if gir 'gobject-introspection')"
 checkdepends="attr-progs cpio elfutils python3-yaml"
 short_desc="Operating system and container binary deployment and upgrades"
 maintainer="Duncaen <duncaen@voidlinux.eu>"
