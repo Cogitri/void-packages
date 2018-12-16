@@ -1,7 +1,7 @@
 # Template file for 'flatpak'
 pkgname=flatpak
 version=1.0.6
-revision=1
+revision=2
 build_style=gnu-configure
 configure_args="--disable-documentation --with-system-bubblewrap"
 hostmakedepends="bubblewrap glib-devel libxslt pkg-config bison"
@@ -16,10 +16,6 @@ homepage="https://flatpak.org/"
 changelog="https://github.com/flatpak/flatpak/blob/master/NEWS"
 distfiles="https://github.com/flatpak/flatpak/releases/download/${version}/flatpak-${version}.tar.xz"
 checksum=b7a256853a57862ce165ca2f458c24e5addefedd74af9fce5b640d8dc315a2e8
-
-post_install() {
-	rm -rf $DESTDIR/usr/lib/systemd
-}
 
 flatpak-devel_package() {
 	short_desc+=" - development files"
