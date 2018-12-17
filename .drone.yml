@@ -27,6 +27,7 @@ steps:
   environment:
     XBPS_MAKEJOBS: 6
     XBPS_ALLOW_RESTRICTED: yes
+    XBPS_DEBUG_PKGS: yes
   commands:
   - common/drone/changed_templates.sh
   - common/drone/build.sh x86_64 x86_64
@@ -50,6 +51,6 @@ trigger:
   - systemd
 ---
 kind: signature
-hmac: 29a17213a4d4806428cd6f05e8160fe708175bdbb27a3e6a48f5a3aa0d159da1
+hmac: 9c0ff187553b44673452fa705008a1f67d1cb0ffa186c5f38e0925cb9fcba342
 
 ...
