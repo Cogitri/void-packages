@@ -18,7 +18,6 @@ steps:
   image: cogitri/voidlinux-ci
   pull: always
   commands:
-  - git fetch --depth 200 git://github.com/Cogitri/void-packages.git master
   - common/drone/prepare.sh
   - common/drone/bootstrap.sh
 
@@ -29,7 +28,7 @@ steps:
     XBPS_MAKEJOBS: 6
     XBPS_ALLOW_RESTRICTED: yes
   commands:
-  - common/travis/changed_templates.sh
+  - common/drone/changed_templates.sh
   - common/drone/build.sh x86_64 x86_64
 
 - name: do-deploy
@@ -51,6 +50,6 @@ trigger:
   - systemd
 ---
 kind: signature
-hmac: a9a91f80d9569e23057532c67cbf1e1c64999131162baebfe50657bfb92c4e34
+hmac: 29a17213a4d4806428cd6f05e8160fe708175bdbb27a3e6a48f5a3aa0d159da1
 
 ...
