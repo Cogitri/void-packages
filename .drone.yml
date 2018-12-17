@@ -1,0 +1,56 @@
+---
+kind: pipeline
+name: build-pkg
+
+clone:
+  depth: 200
+
+volumes:
+- name: distdir
+  host:
+    path: /srv/dist/dist
+- name: keysdir
+  host:
+    path: /var/keys
+
+steps:
+- name: prepare-build
+  image: cogitri/voidlinux-ci
+  pull: always
+  commands:
+  - git fetch --depth 200 git://github.com/Cogitri/void-packages.git master
+  - common/drone/prepare.sh
+  - common/drone/bootstrap.sh
+
+- name: do-build
+  image: cogitri/voidlinux-ci
+  privileged: true
+  environment:
+    XBPS_MAKEJOBS: 6
+    XBPS_ALLOW_RESTRICTED: yes
+  commands:
+  - common/travis/changed_templates.sh
+  - common/drone/build.sh x86_64 x86_64
+
+- name: do-deploy
+  image: cogitri/voidlinux-ci
+  volumes:
+  - name: distdir
+    path: /dist
+  - name: keysdir
+    path: /keys
+  environment:
+    SIGN_PW:
+      from_secret: pkg_sign_pw
+  commands:
+  - cp -r hostdir/binpkgs/systemd/* /dist
+  - /keys/sign-pkgs
+
+trigger:
+  branch:
+  - systemd
+---
+kind: signature
+hmac: a9a91f80d9569e23057532c67cbf1e1c64999131162baebfe50657bfb92c4e34
+
+...
