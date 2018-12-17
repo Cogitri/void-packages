@@ -12,8 +12,22 @@ volumes:
 - name: keysdir
   host:
     path: /var/keys
+- name: cache
+  host:
+    path: /var/cache/drone
 
 steps:
+- name: extract-cache
+  image: drillster/drone-volume-cache
+  pull: always
+  volumes:
+  - name: cache
+    path: /cache
+  settings:
+    mount:
+    - hostdir
+    restore: true
+
 - name: prepare-build
   image: cogitri/voidlinux-ci
   pull: always
@@ -46,11 +60,21 @@ steps:
   - cp -r hostdir/binpkgs/systemd/* /dist
   - /keys/sign-pkgs
 
+- name: create-cache
+  image: drillster/drone-volume-cache
+  volumes:
+  - name: cache
+    path: /cache
+  settings:
+    mount:
+    - hostdir
+    rebuild: true
+
 trigger:
   branch:
   - systemd
 ---
 kind: signature
-hmac: 9c0ff187553b44673452fa705008a1f67d1cb0ffa186c5f38e0925cb9fcba342
+hmac: ad6b1f3285429e759043daaa434d2a47f358b34793410e201a64c3f5137ac466
 
 ...
