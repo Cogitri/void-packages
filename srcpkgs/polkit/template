@@ -3,15 +3,15 @@ pkgname=polkit
 version=0.115
 revision=3
 build_style=gnu-configure
-configure_args="$(vopt_enable gir introspection) --disable-systemd
- --disable-libsystemd-login --disable-libelogind --disable-static
+configure_args="$(vopt_enable gir introspection) --enable-systemd
+ --enable-libsystemd-login --disable-libelogind --disable-static
  --with-authfw=pam  --with-os-type=void --with-mozjs=mozjs-52.0"
 make_dirs="
  /etc/polkit-1/rules.d 0700 polkitd polkitd
  /usr/share/polkit-1/rules.d 0700 polkitd polkitd"
 hostmakedepends="autoconf-archive automake gettext-devel git glib-devel
  gobject-introspection gtk-doc intltool libtool pkg-config"
-makedepends="libglib-devel mozjs52-devel pam-devel"
+makedepends="libglib-devel mozjs52-devel pam-devel libsystemd-devel"
 short_desc="Authorization Toolkit"
 maintainer="Rasmus Thomsen <rasmus.thomsen@protonmail.com>"
 license="GPL-2.0-or-later"
