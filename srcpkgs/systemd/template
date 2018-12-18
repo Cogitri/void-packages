@@ -1,7 +1,7 @@
 # Template file for 'systemd'
 pkgname=systemd
 version=239
-revision=2
+revision=3
 patch_args="-Np1"
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
@@ -29,10 +29,10 @@ hostmakedepends="pkg-config m4 gperf shadow libxslt docbook-xsl python3-lxml
  bash-completion"
 makedepends="libcap-devel libmount-devel libseccomp-devel libapparmor-devel
  acl-devel libblkid-devel libkmod-devel pam-devel cryptsetup-devel zlib-devel
- libcurl-devel libidn-devel libgcrypt-devel libressl-devel dbus-devel lz4-devel
+ libcurl-devel libidn-devel libgcrypt-devel libressl-devel dbus-systemd-devel lz4-devel
  elfutils-devel bzip2-devel liblzma-devel libxkbcommon-devel pcre2-devel
  libglib-devel gnutls-devel polkit-devel"
-depends="quota udev procps-ng util-linux dbus shadow kexec-tools kmod kbd"
+depends="quota udev procps-ng util-linux dbus-systemd shadow kexec-tools kmod kbd"
 short_desc="System and service Manager"
 maintainer="maxice8 <thinkabit.ukim@gmail.com>"
 license="LGPL-2.1-or-later, GPL-2.0-only, GPL-2.0-or-later"
@@ -176,7 +176,7 @@ systemd-sysvcompat_package() {
 }
 
 systemd-container_package() {
-	depends="systemd dbus btrfs-progs"
+	depends="systemd dbus-systemd btrfs-progs"
 	short_desc+=" - Tools for managing containers"
 	pkg_install() {
 		vmove usr/bin/machinectl
