@@ -1,12 +1,12 @@
 # Template file for 'systemd'
 pkgname=systemd
 version=239
-revision=5
+revision=6
 patch_args="-Np1"
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
  -Dstatic-libsystemd=pic -Dlink-udev-shared=false -Dlink-systemctl-shared=true
- -Dutmp=false -Dhibernate=true -Dldconfig=true -Dresolve=true -Defi=true
+ -Dutmp=true -Dhibernate=true -Dldconfig=true -Dresolve=true -Defi=true
  -Dtpm=false -Denvironment-d=true -Dbinfmt=true -Dcoredump=true -Dlogind=true
  -Dhostnamed=true -Dlocaled=true -Dmachined=true -Dportabled=false -Dnetworkd=true
  -Dtimedated=true -Dtimesyncd=true -Dremote=false -Ddefault-kill-user-processes=true
@@ -24,7 +24,9 @@ configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
  -Dumount-path=/usr/bin/umount -Dloadkeys-path=/usr/bin/loadkeys
  -Dsetfont-path=/usr/bin/setfont -Dlibidn=true -Dnobody-user=nfsnobody
  -Dnobody-group=nfsnobody -Dsysvinit-path= -Dsysvrcnd-path= -Dtelinit-path=
- -Ddefault-hierarchy=unified -Ddbuspolicydir=/usr/share/dbus-1/system.d"
+ -Ddefault-hierarchy=unified -Ddbuspolicydir=/usr/share/dbus-1/system.d
+ -Dbashcompletiondir=/usr/share/bash-completion/completions
+ -Dzshcompletiondir=/usr/share/zsh/site-functions -Drandomseed=true"
 hostmakedepends="pkg-config m4 gperf shadow libxslt docbook-xsl python3-lxml
  bash-completion"
 makedepends="libcap-devel libmount-devel libseccomp-devel libapparmor-devel
@@ -56,11 +58,10 @@ post_install() {
 	sed -i '/u systemd-coredump  - "systemd Core Dumper"/d' ${DESTDIR}/usr/lib/sysusers.d/systemd.conf
 
 	# Add users for stuff we use
-	echo '
-	u systemd-network   - "systemd Network Management"
-	u systemd-resolve   - "systemd Resolver"
-	u systemd-timesync  - "systemd Time Synchronization"
-	u systemd-coredump  - "systemd Core Dumper"
+	echo 'u systemd-network   - "systemd Network Management"
+u systemd-resolve   - "systemd Resolver"
+u systemd-timesync  - "systemd Time Synchronization"
+u systemd-coredump  - "systemd Core Dumper"
 	' >> ${DESTDIR}/usr/lib/sysusers.d/systemd.conf
 
 	# Avoid a conflict with base-files
