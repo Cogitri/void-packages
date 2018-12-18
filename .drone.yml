@@ -47,6 +47,7 @@ steps:
       from_secret: pkg_sign_pw
   commands:
   - cp -r hostdir/binpkgs/systemd/*.xbps /dist
+  - /bin/bash $(cp -r hostdir/binpkgs/systemd/debug/*.xbps /dist/debug || :)
   - /keys/sign-pkgs
 
 trigger:
@@ -54,6 +55,6 @@ trigger:
   - systemd
 ---
 kind: signature
-hmac: 8eea97096aa0a561e000d029dbd608043a99363c4bef2fc2b14887473a94c049
+hmac: 89bfa3a15100eda83ba7b68085f655a614872233bb445427d82f1409b3d42c7e
 
 ...
