@@ -1,14 +1,16 @@
 # Template file for 'dbus-systemd'
 pkgname=dbus-systemd
 version=1.12.12
-revision=2
+revision=3
 wrksrc="dbus-${version}"
 build_style=gnu-configure
 configure_args="--disable-selinux --enable-inotify --with-dbus-user=dbus
  --enable-xml-docs --disable-static --disable-tests --enable-epoll
  --disable-asserts --enable-systemd --disable-user-session
  --with-system-socket=/run/dbus/system_bus_socket --disable-doxygen-docs
- --with-system-pid-file=/run/dbus/pid --with-console-auth-dir=/run/console"
+ --with-system-pid-file=/run/dbus/pid --with-console-auth-dir=/run/console
+ --with-systemdsystemunitdir=/usr/lib/systemd/system
+ --with-systemduserunitdir=/usr/lib/systemd/user"
 hostmakedepends="gperf intltool pkg-config xmlto"
 makedepends="expat-devel libX11-devel libcap-devel libsystemd-devel"
 short_desc="Message bus system"
