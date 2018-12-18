@@ -3,8 +3,8 @@ pkgname=iwd
 version=0.14
 revision=2
 build_style=gnu-configure
-configure_args="--disable-systemd-service --enable-docs --enable-pie
- --enable-external-ell"
+configure_args="--enable-systemd-service --enable-docs --enable-pie
+ --enable-external-ell --with-systemd-unitdir=/usr/lib/systemd/system"
 hostmakedepends="asciidoc pkg-config"
 makedepends="readline-devel dbus-devel ell-devel"
 depends="dbus"
