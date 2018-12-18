@@ -1,0 +1,14 @@
+# Template file for 'gnome-logs'
+pkgname=gnome-logs
+version=3.30.0
+revision=1
+build_style=meson
+hostmakedepends="glib-devel pkg-config"
+makedepends="gtk+3-devel libglib-devel libsystemd-devel"
+depends="gsettings-desktop-schemas"
+short_desc="Logs is a viewer for the systemd journal"
+maintainer="Rasmus Thomsen <rasmus.thomsen@protonmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://wiki.gnome.org/Apps/Logs"
+distfiles="${GNOME_SITE}/$pkgname/${version%.*}/$pkgname-$version.tar.xz"
+checksum=d05737e8f1e934fcea4f9ac6afb54b6047c239e7b0ca5a03a03c1f7d211753e7
