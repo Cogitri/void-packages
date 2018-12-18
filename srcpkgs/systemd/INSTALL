@@ -36,8 +36,12 @@ post)
 	else
 		# On install enable the getty@tty1.service and remote-fs, ignore errors.
 		_run_host systemctl --root=. enable getty@tty1.service remote-fs.target || :
+		# On install, create all the users required
+		_run_host systemd-sysusers --root=. || :
+		# On install, make all tmpdirs specified
+		_run_host systemd-tmpfiles --create --root=. || :
 		# Add systemd to nsswitch for support for DynamicUsers
-		_run_host sed -e '/^passwd/ s/$/ systemd/' -e '/^group/ s/$/ systemd/' /etc/nsswitch.conf
+		sed -e '/^passwd/ s/$/ systemd/' -e '/^group/ s/$/ systemd/' /etc/nsswitch.conf
 	fi
 	;;
 esac

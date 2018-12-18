@@ -1,7 +1,7 @@
 # Template file for 'systemd'
 pkgname=systemd
 version=239
-revision=4
+revision=5
 patch_args="-Np1"
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
@@ -41,7 +41,6 @@ homepage="https://www.freedesktop.org/wiki/Software/systemd/"
 distfiles="https://github.com/systemd/systemd/archive/v${version}.tar.gz"
 checksum=8a11b1b07d620f4c06a16e95bba4dd2a97e90efdf2a5ba47ed0a935085787a14
 shlib_provides="libsystemd-shared-${version}.so"
-system_groups="systemd-journal"
 
 conf_files="
  /etc/pam.d/systemd-user
@@ -55,6 +54,14 @@ conf_files="
 post_install() {
 	# This one is provided separately in the systemd-coredump package
 	sed -i '/u systemd-coredump  - "systemd Core Dumper"/d' ${DESTDIR}/usr/lib/sysusers.d/systemd.conf
+
+	# Add users for stuff we use
+	echo '
+	u systemd-network   - "systemd Network Management"
+	u systemd-resolve   - "systemd Resolver"
+	u systemd-timesync  - "systemd Time Synchronization"
+	u systemd-coredump  - "systemd Core Dumper"
+	' >> ${DESTDIR}/usr/lib/sysusers.d/systemd.conf
 
 	# Avoid a conflict with base-files
 	sed -i '/^C \/etc\/nsswitch\.conf/d' ${DESTDIR}/usr/lib/tmpfiles.d/etc.conf
@@ -72,9 +79,6 @@ post_install() {
 	# Add directories systemd needs into tmpfiles.d(5) instead of using
 	# make_dirs
 	vinstall ${FILESDIR}/systemd-dirs.tmpfiles 644 usr/lib/tmpfiles.d systemd-dirs.conf
-
-	# Install runit service
-	vsv udevd
 
 	# remove references to render group and replace with video
 	sed -i 's|GROUP="render"|GROUP="video"|g' ${DESTDIR}/usr/lib/udev/rules.d/50-udev-default.rules
@@ -98,9 +102,6 @@ libudev_package() {
 
 udev_package() {
 	depends="util-linux procps-ng shadow"
-	make_dirs="
-	  etc/udev/rules.d 755 root root
-	  etc/udev/hwdb.d 755 root root"
 	provides="eudev-${version}_${revision}"
 	replaces="eudev>=0"
 	conf_files="/etc/udev/udev.conf"
@@ -109,7 +110,6 @@ udev_package() {
 		vmove usr/bin/udevadm
 		vmove usr/bin/systemd-hwdb
 		vmove etc/udev/udev.conf
-		vmove etc/sv
 		vmove usr/lib/udev
 		vmove usr/share/pkgconfig/udev.pc
 		vmove usr/share/man/man5/udev.conf.5
