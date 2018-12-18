@@ -1,7 +1,7 @@
 # Template file for 'polkit-systemd'
 pkgname=polkit-systemd
 version=0.115
-revision=2
+revision=3
 wrksrc="polkit-${version}"
 build_style=gnu-configure
 configure_args="$(vopt_enable gir introspection) --disable-static
@@ -46,11 +46,17 @@ post_configure() {
 
 post_install() {
 	vinstall ${FILESDIR}/polkit-1.pam 644 etc/pam.d polkit-1
+}
 
-	rm -r $DESTDIR/usr/include
-	rm -r $DESTDIR/usr/lib/pkgconfig
-	if [ "$build_option_gir" ]; then
-		rm -r $DESTDIR/usr/share/gir-*
-	fi
-	rm -r $DESTDIR/usr/lib/*.so
+polkit-systemd-devel_package() {
+	depends="libglib-devel ${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+		if [ "$build_option_gir" ]; then
+			vmove "usr/share/gir-*"
+		fi
+		vmove "usr/lib/*.so"
+	}
 }

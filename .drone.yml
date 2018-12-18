@@ -21,7 +21,6 @@ steps:
   image: cogitri/voidlinux-ci
   pull: always
   commands:
-  - common/drone/prepare.sh
   - common/drone/bootstrap.sh
 
 - name: do-build
@@ -68,6 +67,6 @@ trigger:
   - systemd
 ---
 kind: signature
-hmac: 5fb2804006f1a101d92bad0733918eb84162cec00bc9aad1ea34c32681322102
+hmac: 47b917e90fe838df31eec4c9e76dfbf20fa5253e8b0682157428e15d3d2ac1b0
 
 ...
