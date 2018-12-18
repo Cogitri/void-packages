@@ -1,7 +1,7 @@
 # Template file for 'systemd'
 pkgname=systemd
 version=239
-revision=3
+revision=4
 patch_args="-Np1"
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
@@ -32,7 +32,8 @@ makedepends="libcap-devel libmount-devel libseccomp-devel libapparmor-devel
  libcurl-devel libidn-devel libgcrypt-devel libressl-devel dbus-systemd-devel lz4-devel
  elfutils-devel bzip2-devel liblzma-devel libxkbcommon-devel pcre2-devel
  libglib-devel gnutls-devel polkit-devel"
-depends="quota udev procps-ng util-linux dbus-systemd shadow kexec-tools kmod kbd"
+depends="quota udev procps-ng util-linux dbus-systemd shadow kexec-tools kmod kbd
+ polkit"
 short_desc="System and service Manager"
 maintainer="maxice8 <thinkabit.ukim@gmail.com>"
 license="LGPL-2.1-or-later, GPL-2.0-only, GPL-2.0-or-later"
