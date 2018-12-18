@@ -1,7 +1,7 @@
 # Template file for 'gnome-session'
 pkgname=gnome-session
 version=3.30.1
-revision=2
+revision=3
 build_style=meson
 hostmakedepends="glib-devel intltool pkg-config xmlto"
 configure_args="-Dsystemd_journal=true"
@@ -9,7 +9,7 @@ makedepends="libsystemd-devel gnome-desktop-devel gtk+3-devel json-glib-devel
  libglib-devel libICE-devel libSM-devel libXtst-devel startup-notification-devel
  upower-devel xtrans"
 depends="alsa-plugins-pulseaudio dconf desktop-file-utils
- gsettings-desktop-schemas hicolor-icon-theme polkit-elogind"
+ gsettings-desktop-schemas hicolor-icon-theme polkit-systemd"
 short_desc="GNOME session management utilities"
 maintainer="Enno Boland <gottox@voidlinux.org>"
 homepage="http://www.gnome.org"
