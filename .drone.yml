@@ -50,11 +50,24 @@ steps:
   - /bin/bash $(cp -r hostdir/binpkgs/systemd/debug/*.xbps /dist/debug || :)
   - /keys/sign-pkgs
 
+- name: matrix-notification
+  image: plugins/matrix
+  settings:
+    roomid: pRVxCrDHTiIdkIxFtr:matrix.org
+    username:
+      from_secret: matrix_username
+    password:
+      from_secret: matrix_password
+  when:
+    status:
+     - success
+     - failure
+
 trigger:
   branch:
   - systemd
 ---
 kind: signature
-hmac: 89bfa3a15100eda83ba7b68085f655a614872233bb445427d82f1409b3d42c7e
+hmac: 5fb2804006f1a101d92bad0733918eb84162cec00bc9aad1ea34c32681322102
 
 ...
