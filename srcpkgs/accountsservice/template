@@ -1,10 +1,11 @@
 # Template file for 'accountsservice'
 pkgname=accountsservice
 version=0.6.54
-revision=2
+revision=3
 build_style=meson
 build_helper="gir"
-configure_args="-Dsystemdsystemunitdir=/usr/lib/systemd/system $(vopt_bool gir introspection)"
+configure_args="-Dsystemdsystemunitdir=/usr/lib/systemd/system
+ -Dsystemd=true $(vopt_bool gir introspection)"
 hostmakedepends="glib-devel pkg-config"
 makedepends="polkit-devel libsystemd-devel"
 short_desc="D-Bus interfaces for querying and manipulating user account information"
