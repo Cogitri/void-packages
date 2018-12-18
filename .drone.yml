@@ -17,17 +17,6 @@ volumes:
     path: /var/cache/drone
 
 steps:
-- name: extract-cache
-  image: drillster/drone-volume-cache
-  pull: always
-  volumes:
-  - name: cache
-    path: /cache
-  settings:
-    mount:
-    - hostdir
-    restore: true
-
 - name: prepare-build
   image: cogitri/voidlinux-ci
   pull: always
@@ -60,21 +49,11 @@ steps:
   - cp -r hostdir/binpkgs/systemd/*.xbps /dist
   - /keys/sign-pkgs
 
-- name: create-cache
-  image: drillster/drone-volume-cache
-  volumes:
-  - name: cache
-    path: /cache
-  settings:
-    mount:
-    - hostdir
-    rebuild: true
-
 trigger:
   branch:
   - systemd
 ---
 kind: signature
-hmac: eff6fe0e58b7b8e2ba5bc0bf4d15a9b0e92a6bf1bc8c5c7c92f065da8a191fcb
+hmac: 8eea97096aa0a561e000d029dbd608043a99363c4bef2fc2b14887473a94c049
 
 ...

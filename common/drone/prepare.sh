@@ -1,2 +1,2 @@
 #!/bin/bash
-sed '1s/^/repository=\/dist\n /' -i etc/repos-local.conf
+sed '1s/^/repository=https:\/\/exqa.de\n /' -i etc/repos-remote.conf
