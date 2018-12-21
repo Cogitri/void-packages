@@ -1,7 +1,7 @@
 # Template file for 'systemd'
 pkgname=systemd
-version=239
-revision=7
+version=240
+revision=1
 patch_args="-Np1"
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
@@ -41,7 +41,7 @@ maintainer="maxice8 <thinkabit.ukim@gmail.com>"
 license="LGPL-2.1-or-later, GPL-2.0-only, GPL-2.0-or-later"
 homepage="https://www.freedesktop.org/wiki/Software/systemd/"
 distfiles="https://github.com/systemd/systemd/archive/v${version}.tar.gz"
-checksum=8a11b1b07d620f4c06a16e95bba4dd2a97e90efdf2a5ba47ed0a935085787a14
+checksum=8f15aec1ac926e13a21a04d0ca3fe371f7004951448142a6f8952075c5b5f0b5
 shlib_provides="libsystemd-shared-${version}.so"
 
 conf_files="
