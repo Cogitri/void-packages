@@ -1,7 +1,7 @@
 # Template file for 'systemd'
 pkgname=systemd
 version=240
-revision=1
+revision=2
 patch_args="-Np1"
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
@@ -238,8 +238,8 @@ systemd-coredump_package() {
 		vmove usr/lib/sysctl.d/50-coredump.conf
 		vmove etc/systemd/coredump.conf
 
-		vmkdir usr/lib/sysuser.d
+		vmkdir usr/lib/sysusers.d
 		# This one is extracted from basic.conf and moved to this package
-		echo 'u systemd-coredump  - "systemd Core Dumper"' > ${PKGDESTDIR}/usr/lib/sysuser.d/systemd-coredump.conf
+		echo 'u systemd-coredump  - "systemd Core Dumper"' > ${PKGDESTDIR}/usr/lib/sysusers.d/systemd-coredump.conf
 	}
 }
