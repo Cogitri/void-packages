@@ -33,6 +33,14 @@ post)
 		if [ -d run/systemd/system ]; then
 			_run_host systemctl daemon-reload
 		fi
+
+		# FIXME(Cogitri) Systemd should do this automatically by checking if
+		# /etc & /var have newer timestamps than /usr...but it doesn't!
+		# Remove /etc/.updated and /var/.updated if we're updating since /etc/ and /var
+		# aren't up-to-date anymore then! This causes services which have
+		# "ConditionNeedsUpdate={/etc,/var}" (like systemd-sysusers) to be run after an update
+		# Ignore errors since users may not have the files and `-f` seems a little brutal
+		_run_host rm /etc/.updated /var/.updated 2>/dev/null
 	else
 		# On install enable the getty@tty1.service and remote-fs, ignore errors.
 		_run_host systemctl --root=. enable getty@tty1.service remote-fs.target || :
