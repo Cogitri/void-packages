@@ -3,11 +3,11 @@ pkgname=bluez
 version=5.50
 revision=4
 build_style=gnu-configure
-configure_args="--with-udevdir=/usr/lib/udev --disable-systemd
+configure_args="--with-udevdir=/usr/lib/udev --enable-systemd
  --enable-sixaxis --enable-threads --enable-library"
 hostmakedepends="automake flex libtool pkg-config"
 makedepends="cups-devel eudev-libudev-devel libglib-devel libical-devel
- readline-devel"
+ readline-devel systemd-devel"
 short_desc="Bluetooth tools and daemons"
 maintainer="Juan RP <xtraeme@voidlinux.org>"
 license="GPL-2.0-or-later, LGPL-2.1-or-later"
