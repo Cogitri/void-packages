@@ -30,7 +30,7 @@ group_add() {
 		if [ -n "$use_gid" ]; then
 			groupadd -r ${_grname} -g ${_gid} >/dev/null 2>&1
 		else
-			groupadd -r ${_grname} >/dev/null 2>&1
+			groupadd -r ${_grname} >/dev/null 2>&1 0<&-
 		fi
 		if [ $? -eq 0 ]; then
 			echo "Created ${_grname} ($use_gid) system group."
