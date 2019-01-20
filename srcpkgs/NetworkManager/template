@@ -12,7 +12,7 @@ configure_args="--without-dhcpcd --with-dhclient=/usr/bin/dhclient
  --with-pppd-plugin-dir=/usr/lib/pppd/2.4.7 --enable-modify-system
  --with-modem-manager-1 --with-resolvconf=/usr/bin/resolvconf
  --with-session-tracking=systemd
- --with-suspend-resume=upower --with-libnm-glib --disable-ifupdown
+ --with-suspend-resume=systemd --with-libnm-glib --disable-ifupdown
  --enable-polkit-agent --enable-tests=no --with-systemd
  --with-systemd-journal=yes --with-systemd-logind=yes --disable-gtk-doc
  --with-dbus-sys-dir=/etc/dbus-1/system.d
@@ -37,7 +37,7 @@ hostmakedepends="automake bluez dbus-glib-devel dhclient gettext-devel
 makedepends="libuuid-devel gnutls-devel dbus-glib-devel libgudev-devel
  libnl3-devel polkit-devel ppp-devel iptables-devel libcurl-devel
  ModemManager-devel readline-devel libndp-devel newt-devel jansson-devel
- libpsl-devel libsystemd-devel libudev-devel
+ libpsl-devel libsystemd-devel libudev-devel systemd-devel
  $(vopt_if gir libgirepository-devel) $(vopt_if elogind elogind-devel)"
 # Install host dependency to read the soname. Should be the same on
 # host and target.
