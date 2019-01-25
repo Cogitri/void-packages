@@ -1,7 +1,7 @@
 # Template file for 'iwd'
 pkgname=iwd
 version=0.14
-revision=2
+revision=3
 build_style=gnu-configure
 configure_args="--enable-systemd-service --enable-docs --enable-pie
  --enable-external-ell --with-systemd-unitdir=/usr/lib/systemd/system"
