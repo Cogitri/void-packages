@@ -49,7 +49,9 @@ post)
 		# On install, make all tmpdirs specified
 		_run_host systemd-tmpfiles --create --root=. || :
 		# Add systemd to nsswitch for support for DynamicUsers
-		sed -e '/^passwd/ s/$/ systemd/' -e '/^group/ s/$/ systemd/' /etc/nsswitch.conf
+		if ! grep -q systemd /etc/nsswitch.conf; then
+			sed -e '/^passwd/ s/$/ systemd/' -e '/^group/ s/$/ systemd/' -i /etc/nsswitch.conf
+		fi
 	fi
 	;;
 esac

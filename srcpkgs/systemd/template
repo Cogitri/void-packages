@@ -1,7 +1,8 @@
 # Template file for 'systemd'
 pkgname=systemd
-version=240
-revision=4
+version=241
+revision=1
+wrksrc=systemd-7f700b8a2714453d0fbd5dda1ba5a826d6a9f7a7
 build_style=meson
 configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
  -Dstatic-libsystemd=pic -Dlink-udev-shared=false -Dlink-systemctl-shared=true
@@ -27,7 +28,7 @@ configure_args="-Dsplit-usr=false -Dsplit-bin=false -Dstatic-libudev=pic
  -Dbashcompletiondir=/usr/share/bash-completion/completions
  -Dzshcompletiondir=/usr/share/zsh/site-functions -Drandomseed=true"
 hostmakedepends="pkg-config m4 gperf shadow libxslt docbook-xsl python3-lxml
- bash-completion"
+ bash-completion unzip"
 makedepends="libcap-devel libmount-devel libseccomp-devel libapparmor-devel
  acl-devel libblkid-devel libkmod-devel pam-devel cryptsetup-devel zlib-devel
  libcurl-devel libidn-devel libgcrypt-devel libressl-devel dbus-systemd-devel lz4-devel
@@ -39,8 +40,8 @@ short_desc="System and service Manager"
 maintainer="maxice8 <thinkabit.ukim@gmail.com>"
 license="LGPL-2.1-or-later, GPL-2.0-only, GPL-2.0-or-later"
 homepage="https://www.freedesktop.org/wiki/Software/systemd/"
-distfiles="https://github.com/systemd/systemd/archive/v${version}.tar.gz"
-checksum=8f15aec1ac926e13a21a04d0ca3fe371f7004951448142a6f8952075c5b5f0b5
+distfiles="https://github.com/systemd/systemd/archive/7f700b8a2714453d0fbd5dda1ba5a826d6a9f7a7.zip"
+checksum=2053e5ac700a039e385e7ad346b43916c6fdd1d45d917e0399a104bb01882581
 shlib_provides="libsystemd-shared-${version}.so"
 patch_args="-Np1"
 
