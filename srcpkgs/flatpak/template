@@ -8,7 +8,8 @@ configure_args="--disable-documentation --with-system-bubblewrap
  $(vopt_enable gir introspection)"
 hostmakedepends="bubblewrap glib-devel libxslt pkg-config bison"
 makedepends="appstream-glib-devel gpgme-devel json-glib-devel libcap-devel
- libostree-devel libseccomp-devel polkit-devel dconf-devel"
+ libostree-devel libseccomp-devel polkit-devel systemd-devel libsystemd-devel
+ dconf-devel"
 depends="bubblewrap"
 checkdepends="bubblewrap dbus"
 short_desc="Application sandboxing and distribution framework"
@@ -26,6 +27,8 @@ case "$XBPS_TARGET_MACHINE" in
 	*-musl) ;;
 	*) build_options_default+=" gir" ;;
 esac
+=======
+>>>>>>> flatpak: update to 1.2.0.
 
 flatpak-devel_package() {
 	short_desc+=" - development files"
